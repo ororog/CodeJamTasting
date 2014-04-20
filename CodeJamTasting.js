@@ -112,6 +112,10 @@ $(function() {
 					});
 				});
 			});
+			$('#scb-table-foot').hide();
+			setTimeout(function() {
+				$('#scb-table-foot').show();
+			}, 0);
 		});
 	}
 
