@@ -80,7 +80,8 @@ $(function() {
 		}, DELAY).done(function() {
 			$('#scb-table-body tr').each(function() {
 				var problemId = 0;
-				var username = $('.scb-player-name', $(this)).text();
+				var username = $('.scb-player-name', $(this)).html();
+				username = username.replace(/<(img|p) .*>/, '');
 				$('.left-bd', $(this)).each(function() {
 					var first = true, $node = $(this), difficulty = 0;
 					while (first || $node.attr('class') == '') {
