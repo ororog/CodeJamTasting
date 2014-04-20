@@ -103,7 +103,7 @@ $(function() {
 					problemId++;
 				});
 			});
-			$('.scb-range-active,.scb-tab-button').each(function() {
+			$('.scb-range-active,.scb-tab-button,#scb-add-friend-form').each(function() {
 				$(this).click(function() {
 					waitCondition(function() {
 						return $('.preview').length == 0;
@@ -112,6 +112,8 @@ $(function() {
 					});
 				});
 			});
+
+			// force redraw
 			$('#scb-table-foot').hide();
 			setTimeout(function() {
 				$('#scb-table-foot').show();
