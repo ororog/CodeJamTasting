@@ -1,0 +1,23 @@
+{
+    "name": "Code Jam Tasting",
+    "manifest_version": 2,
+    "version": "0.1",
+    "description": "",
+    "content_scripts": [{
+        "matches": [
+            "https://code.google.com/codejam/contest/*/scoreboard*"
+        ],
+        "css": [
+            "bootstrap.min.css",
+            "prettify.css",
+            "CodeJamTasting.css"
+        ],
+        "js": [
+            "jquery.min.js",
+            "prettify.js",
+            "bootstrap.min.js",
+            "jszip.min.js",
+            "CodeJamTasting.js"
+        ]
+    }]
+}

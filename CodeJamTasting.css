@@ -1,0 +1,18 @@
+#myModal {
+	width: 800px;
+	margin-left: -400px;
+}
+
+.preview {
+	margin-left: 2px;
+	display: inline-block;
+}
+
+.modal-body {
+	padding: 5px;
+}
+
+.modal-body > * {
+	margin: 0;
+}
+
