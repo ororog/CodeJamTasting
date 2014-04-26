@@ -9,6 +9,7 @@
 }
 
 .modal-body {
+	max-height: 500px;
 	padding: 5px;
 }
 

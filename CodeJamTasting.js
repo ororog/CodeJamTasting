@@ -8,7 +8,7 @@ $(function() {
 			'problem=PROBLEM_ID&' +
 			'io_set_id=DIFFICULTY&' +
 			'username=USERNAME';
-
+	var currentSource = '';
 	var modalHtml = [
 		'<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">',
 		'<div class="modal-header">',
@@ -19,28 +19,21 @@ $(function() {
 		'<pre id="jam-code" class="prettyprint linenums">code goes here</pre>',
 		'</div>',
 		'<div class="modal-footer">',
+		'<button id="modal-copy-button" class="btn" aria-hidden="true">Copy</button>',
 		'<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>',
 		'</div>',
 		'</div>'
 	];
 
 	$('body').append(modalHtml.join(''));
-	$('#myModal').on('shown', function() {
-		$('.modal-body').scrollTop(0);
+	$('#modal-copy-button').click(function() {
+		chrome.runtime.sendMessage({
+			text: currentSource
+		});
 	});
 
-	$('script').each(function() {
-		if (this.src != '') return;
-		var source = this.innerHTML, match;
-		match = source.match(/GCJ\.contestId = "(\d+)"/);
-		if (match) {
-			CONTEST_ID = match[1];
-		}
-		match = source.match(/"id": "\d+"/g);
-		match && match.forEach(function(str) {
-			var pid = str.match(/\d+/)[0];
-			PROBLEM.push(pid);
-		});
+	$('#myModal').on('shown', function() {
+		$('.modal-body').scrollTop(0);
 	});
 
 	function onPreview(problemId, difficulty, username) {
@@ -58,6 +51,7 @@ $(function() {
 			var zip = new JSZip(res);
 			var source = zip.file(/.*/)[0];
 			$('#jam-code').removeClass('prettyprinted');
+			currentSource = source.asText();
 			$('#jam-code').text(source.asText());
 			prettyPrint();
 			var headerText = [
@@ -147,7 +141,33 @@ $(function() {
 		}, delay);
 		return d.promise();
 	};
+	var href = location.href;
+	if (href.indexOf('https://code.google.com/codejam/') == 0) {
+		$('script').each(function() {
+			if (this.src != '') return;
+			var source = this.innerHTML, match;
+			match = source.match(/GCJ\.contestId = "(\d+)"/);
+			if (match) {
+				CONTEST_ID = match[1];
+			}
+			match = source.match(/"id": "\d+"/g);
+			match && match.forEach(function(str) {
+				var pid = str.match(/\d+/)[0];
+				PROBLEM.push(pid);
+			});
+		});
+		addPreview();
+	} else if (href.indexOf('http://www.go-hero.net/jam/') == 0) {
+		$('a[href^="http://code.google.com/codejam/contest/scoreboard/do?"]').each(function() {
+			var $previewNode = $('<a/>');
+			var url = this.attr('href');
+			$previewNode.text('view');
+			$previewNode.attr('href', 'javascript:;');
+			$previewNode.click(function() {
 
-	addPreview();
-
+			});
+			$previewNode.addClass('preview');
+			$previewNode.insertAfter($(this));
+		});
+	}
 });
