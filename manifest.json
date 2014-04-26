@@ -3,7 +3,7 @@
     "manifest_version": 2,
     "version": "1.0.0",
     "description": "Google Code Jam のスコアボードにソースプレビューボタンを追加",
-    "permissions":["clipboardRead"],
+    "permissions":["clipboardRead", "http://code.google.com/"],
     "background": {
         "scripts": [
             "BackgroundCopy.js"

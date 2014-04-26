@@ -36,13 +36,17 @@ $(function() {
 		$('.modal-body').scrollTop(0);
 	});
 
-	function onPreview(problemId, difficulty, username) {
-		var url = BASE_URL;
-		url = url.replace('CONTEST_ID', CONTEST_ID);
-		url = url.replace('PROBLEM_ID', PROBLEM[problemId]);
-		url = url.replace('DIFFICULTY', difficulty);
-		url = url.replace('USERNAME', username);
+	function generateHeader(difficulty, username, problem) {
+		return [
+			username,
+			'\'s ',
+			problem || 'solution',
+			' - ',
+			difficulty == '0' ? 'Small' : 'Large'
+		].join('');
+	}
 
+	function showCode(url, headerText) {
 		$.ajax({
 			type: 'GET',
 			mimeType: 'text/plain; charset=x-user-defined',
@@ -54,18 +58,23 @@ $(function() {
 			currentSource = source.asText();
 			$('#jam-code').text(source.asText());
 			prettyPrint();
-			var headerText = [
-				username,
-				'\'s Problem ',
-				String.fromCharCode('A'.charCodeAt(0) + problemId),
-				' - ',
-				difficulty == '0' ? 'Small' : 'Large',
-				' (' + source.name + ') '
-			];
-
-			$('#myModalLabel').text(headerText.join(''));
+			$('#myModalLabel').text(headerText);
 			$('#myModal').modal({});
 		});
+	}
+
+	function onPreview(problemId, difficulty, username) {
+		var url = BASE_URL;
+		url = url.replace('CONTEST_ID', CONTEST_ID);
+		url = url.replace('PROBLEM_ID', PROBLEM[problemId]);
+		url = url.replace('DIFFICULTY', difficulty);
+		url = url.replace('USERNAME', username);
+		var headerText = generateHeader(
+			difficulty,
+			username,
+			'Problem ' + String.fromCharCode('A'.charCodeAt(0) + problemId)
+		);
+		showCode(url, headerText);
 	}
 
 	function addPreview() {
@@ -141,6 +150,8 @@ $(function() {
 		}, delay);
 		return d.promise();
 	};
+
+	// startup
 	var href = location.href;
 	if (href.indexOf('https://code.google.com/codejam/') == 0) {
 		$('script').each(function() {
@@ -160,11 +171,13 @@ $(function() {
 	} else if (href.indexOf('http://www.go-hero.net/jam/') == 0) {
 		$('a[href^="http://code.google.com/codejam/contest/scoreboard/do?"]').each(function() {
 			var $previewNode = $('<a/>');
-			var url = this.attr('href');
+			var url = $(this).attr('href');
+			var username = url.match(/username=([^&]+)/)[1];
+			var difficulty = url.match(/io_set_id=(\d+)/)[0];
 			$previewNode.text('view');
 			$previewNode.attr('href', 'javascript:;');
 			$previewNode.click(function() {
-
+				showCode(url, generateHeader(difficulty, username));
 			});
 			$previewNode.addClass('preview');
 			$previewNode.insertAfter($(this));
