@@ -1,7 +1,7 @@
 {
     "name": "Code Jam Tasting",
     "manifest_version": 2,
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Google Code Jam のスコアボードにソースプレビューボタンを追加",
     "permissions":["clipboardRead", "http://code.google.com/"],
     "background": {
