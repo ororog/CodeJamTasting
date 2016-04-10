@@ -168,10 +168,10 @@ $(function() {
 			});
 		});
 		addPreview();
-	} else if (href.indexOf('http://www.go-hero.net/jam/') == 0) {
+	} else if (href.indexOf('https://www.go-hero.net/jam/') == 0) {
 		$('a[href^="http://code.google.com/codejam/contest/scoreboard/do?"]').each(function() {
 			var $previewNode = $('<a/>');
-			var url = $(this).attr('href');
+			var url = $(this).attr('href').replace(/^http:/, '');
 			var username = url.match(/username=([^&]+)/)[1];
 			var difficulty = url.match(/io_set_id=(\d+)/)[0];
 			$previewNode.text('view');
