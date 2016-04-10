@@ -13,7 +13,7 @@
     "content_scripts": [{
         "matches": [
             "https://code.google.com/codejam/contest/*/scoreboard*",
-            "http://www.go-hero.net/jam/*"
+            "https://www.go-hero.net/jam/*"
         ],
         "css": [
             "bootstrap.min.css",
